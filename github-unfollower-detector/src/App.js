@@ -207,7 +207,7 @@ function App() {
     ) : null }
     <UserForm user={user} setUser={setUser} setQuery={setQuery} />
     <TabPanel elements={elements}/>    
-    <a href="https://github.com/sergiss/github-unfollower-detector" target="_blank"><i className="fa">&#xf09b;</i> Source Code </a>
+    <a href="https://github.com/DataDaimon/datadaimon.github.io/tree/main/github-unfollower-detector" target="_blank"><i className="fa">&#xf09b;</i> Source Code </a>
   </div>;
 }
 
