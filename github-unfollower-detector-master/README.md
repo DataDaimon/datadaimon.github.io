@@ -1,7 +1,7 @@
 # github-unfollower-detector
 :skull: Small application to detect evil users who have stopped following you on Github
 
-### [Demo](https://sergiss.github.io/github-unfollower-detector/)
+### [Demo](https://richardflores.me/github-unfollower-detector-master/)
 
 ![Unfollower Detector](https://raw.githubusercontent.com/sergiss/github-unfollower-detector/master/unfollower-detector.png)
 
