@@ -3,9 +3,6 @@
 
 ### [Demo](https://richardflores.me/github-unfollower-detector-master/)
 
-![Unfollower Detector](https://raw.githubusercontent.com/sergiss/github-unfollower-detector/master/unfollower-detector.png)
 
 ### Please read this to learn more about rate limiting: 
 https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting
-
-www.sergiosoriano.com
