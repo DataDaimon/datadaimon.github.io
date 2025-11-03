@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2022/12/11 - Long Time No See</title>
+    <link rel="stylesheet" href="css/styles.css">
+
+</head>
+<body>
+    <a href="../index.html">Home</a> <a href="../blog.html">Blog</a>
+
+    <h1>Game Theory for ToDo List</h1>
+    <hr>
+    
+    <p>
+        <h3>Stop Guessing, Start Ranking: How I Used Game Theory to Build a "Utility-First" Task Manager</h3>
+
+        <a href="../blog-entries/Game Theory Task Sheet.xlsx">Game Theory Excel Sheet Template</a><br><br>
+
+        We all have a task list. And we all face the same paralyzing question every morning: "What's the most important thing to work on right now?"<br><br>
+
+        Is it the massive, long-term project (like "PhD Research")? Is it the urgent, nagging task (like "Pay credit card bill")? Is it the quick-win (like "Get an Oil Change")? Is it the one you really don't want to do (like "Organize Receipts")?<br><br>
+
+        The problem is that our brains aren't built to weigh all these factors simultaneously. We tend to follow a "Loudest-First" (urgency) or "Easiest-First" (procrastination) model.<br><br>
+
+        But what if we could apply a rational, economic model? This is where game theory comes in. We can build a system that acts as our "rational player," sorting our tasks not by what's loudest, but by what gives us the highest possible "Utility per Hour."<br><br>
+
+        I built a model to do just that. <br><br>
+        
+        Here's how it works:<br>
+
+        <h4>The Core Concept: The "Task Utility Index" (TUI)</h4>
+
+        In game theory, "utility" is the payoff a player receives. Our "game" is to maximize our life's utility against the "opponent" of limited time.<br><br>
+
+        The core idea is simple: every task has a Payoff (the value of getting it done) and a Cost (the time it takes). The best task to do is the one with the most efficient score.<br>
+
+        <p>
+          TUI Score =
+          <math display="inline">
+            <mfrac>
+              <msup>
+                <mi>Total Payoff</mi>
+              </msup>
+              <mn>Total Cost</mn>
+            </mfrac>
+          </math>
+        </p>
+
+        A high score means a massive return on your most valuable asset: your time. To make this work, we have to quantify that "Payoff." After several iterations, I found the payoff is a product of three key factors: <br>
+
+        <ol>
+        
+        <li>Inherent Value: How important is this to my life goals?</li><br>
+
+        <li>Temporal Value: How much time-pressure is on this task?</li><br>
+
+        <li>Psychological Value: What is the mental "relief" of getting this done?</li>
+
+        </ol>
+
+        This led to my final, comprehensive formula.<br>
+
+        <h4>The Final Formula (The "Engine")</h4>
+        The Task Utility Index (TUI) is calculated for every task on the list:
+
+        <p>
+          TUI =
+          <math display="inline">
+            <mfrac>
+              <msup>
+                <mi>(Inherent Value) X (Temporal Value) X (Psychological Value) </mi>
+              </msup>
+              <mn>Cost</mn>
+            </mfrac>
+          </math>
+        </p>
+
+        Which, in our spreadsheet, translates to: <br><br>
+
+        <mark>=(([@W]*[@F])*([@U]+[@D])*[@Dr])/[@C]</mark><br><br>
+
+        Let's break down each component. <br><br>
+
+        <strong>1. The Cost:</strong> <mark>C = MAX([Time (hrs)], 0.25)</mark>
+        <ul>
+        <li>This is the denominator. It's the <strong>time_to_complete</strong> in hours. We use a <strong>MAX(time, 0.25)</strong> function to ensure that tiny 5-minute tasks still have a cost, which properly rewards "quick wins" without breaking the math.</li>
+        </ul>
+
+        <strong>2. The Payoff (Part 1): Inherent Value</strong> <mark>(W * F)</mark><br>
+        <ul>
+        <li><strong>W (Weight):</strong> This is the base importance, looked up from a <strong>Weights</strong> table. It answers: "How much do I value 'Health', 'Financial', or 'Academic' tasks?" This is your primary personal "weighting."</li><br>
+
+        <li><strong>F (Frequency):</strong> This is a multiplier for recurring tasks. A <strong>monthly</strong> or <strong>daily</strong> task gets a higher <strong>F</strong> value because it's a "maintenance" habit. Its value isn't just in the task itself, but in preventing future problems.</li>
+        </ul>
+
+        <strong>3. The Payoff (Part 2): Temporal Value</strong> <mark>(U + D)</mark><br>
+
+        <ul>
+        <li>U (Urgency): This is the subjective "how hot does it feel?" score (low, medium, high).</li><br>
+
+        <li>D (Due Date): This is the objective time pressure. A complex IF formula checks the due date against TODAY() and assigns a score that spikes as the deadline approaches (e.a., 0 for >14 days, 3 for <7 days, 10 for overdue).</li>
+        </ul>
+
+        <strong>4. The Payoff (Part 3): Psychological Value</strong> (Dr)<br>
+        <ul>
+        <li><strong>Dr (Dread):</strong> This is our "Eat the Frog" multiplier. It quantifies the psychological cost of procrastination. A task you dread gives you a significant "relief" payoff when completed. By assigning a <strong>Dread</strong> level <strong>(Low, Medium, High)</strong>, we multiply the task's entire payoff, pushing those dreaded-but-important tasks up the list.</li>
+        </ul>
+
+        <h4>From "TUI" to "Rank": Making it Scannable</h4>
+
+        The <strong>TUI</strong> scores are great (e.g., 42, 37.5, 18.75), but they aren't intuitive. To make the list instantly actionable, we normalize all scores to a 0-100 scale using a <strong>Min-Max Normalization</strong> formula.<br><br>
+
+       <mark>Rank = 100 * ([@TUI] - MIN([TUI])) / (MAX([TUI]) - MIN([TUI]))</mark><br><br>
+
+        The task with the highest <strong>TUI</strong> score always gets a <strong>100</strong>. The lowest gets a <strong>0</strong>. Everything else is scaled in between. Now, you just sort your list by "Rank" from largest to smallest.
+
+        <h4>Strategic Insights: What The Model Teaches</h4>
+
+        This model doesn't just give you a list; it gives you strategic insights.
+
+        <ol>
+        <li><strong>It loves "Quick Wins."</strong> The "Oil Change" task (TUI: 37.5) ranked #2, not because it was the most important, but because it had a tiny cost <strong>(C=0.5)</strong> and good urgency. The model says: "Get this 30-minute task done as it's the most efficient use of your next half-hour."</li><br>
+
+        <li><strong>It values "Maintenance."</strong> The "Update Budget Sheet" task (TUI: 42) ranked #1. Why? Because it was <strong>Financial (High W) and monthly (High F)</strong>. The model recognizes that consistent habits are a high-utility investment.</li><br>
+
+        <li><strong>It solves the "Long-Term Project" Dilemma.</strong> My "PhD Research" and "Publication" tasks sank to the bottom (Rank: ~5 and 0). The model isn't saying they're unimportant; it's saying a 4- or 6-hour, low-urgency task is an inefficient block of time. The strategy is to "slice the task." Don't log "PhD Research" (Cost: 4). Log "Review Chapter 1" (Cost: 1.5). This lowers the cost, dramatically raises the TUI, and makes the project "winnable" in the daily ranking.</li>
+        </ol>
+
+        This system turns a chaotic list of "stuff-to-do" into a rational, optimized strategy, ensuring that whatever I work on, I'm making the best possible "move" with my time.
+    </p>
+    
+</body>
+</html>
